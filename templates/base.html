@@ -1,0 +1,49 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Protospace</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+JP:400,700,900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="{% static 'style.css' %}">
+    <!-- <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+    <%= javascript_importmap_tags %> -->
+  </head>
+
+  <body>
+    <header class="header">
+      <div class="inner">
+        <div class="nav">
+          <div class="nav__left">
+            <a href="{% url 'prototypes:list' %}">
+              <img class="logo" src="{% static 'images/logo.png' %}">
+            </a>
+          </div>
+          <div class="nav__right">
+          {% if request.user.is_authenticated %}
+          <!-- ログインしているときは以下を表示するようにしましょう -->
+            <!-- <%= link_to "ログアウト", root_path, class: :nav__logout %>
+            <%= link_to "New Proto", root_path, class: :nav__btn %> -->
+            <form action="{% url 'accounts:logout' %}" class="example4" method="post">{% csrf_token %}
+              <input type="submit" class="nav__logout" value="ログアウト">
+            </form>
+            <a href="{% url 'prototypes:create' %}" class="nav__btn">New Proto</a>
+            <!-- ログインしているときは上記を表示するようにしましょう -->
+          {% else %}
+            <!-- ログインしていないときは以下を表示するようにしましょう -->
+            <a href="{% url 'accounts:login' %}" class="nav__btn">ログイン</a>
+            <a href="{% url 'accounts:signup' %}" class="nav__btn">新規登録</a>
+            <!-- ログインしていないときは上記を表示するようにしましょう -->
+          {% endif %}
+          </div>
+        </div>
+      </div>
+    </header>
+    {% block main %}{% endblock %}
+    <footer class="footer">
+      <p class="copyright">Copyright © PROTO SPACE All rights reserved.</p>
+    </footer>
+  </body>
+</html>

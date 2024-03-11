@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+<main class="main">
+  <div class="inner">
+    <!-- ログインしているときは以下を表示する -->
+    {% if request.user.is_authenticated %}
+      <div class="greeting">
+        こんにちは、
+        <!-- <%= link_to "ユーザー名さん", root_path, class: :greeting__link%> -->
+        <a href="{% url 'accounts:detail' request.user.id %}" class="greeting__link">{{request.user.username}}</a>さん
+      </div>
+    {% endif %}
+    <!-- ログインしているときは上記を表示する -->
+    <div class="card__wrapper">
+      <!-- 投稿機能実装後、部分テンプレートでプロトタイプ投稿一覧を表示する -->
+      {% include 'prototypes/_prototype.html' with prototype_items=object_list only %}
+      <!-- {% for article in object_list %}
+      <li>{{ article.title }}</li>
+      <img src="{{ article.image.url }}">
+      {% endfor %} -->
+    </div>
+  </div>
+</main>
+{% endblock %}

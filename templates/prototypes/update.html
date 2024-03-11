@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+<div class="main">
+  <div class="inner">
+    <div class="form__wrapper">
+      <h2 class="page-heading">プロトタイプ編集</h2>
+      <!-- 部分テンプレートでフォームを表示する -->
+      {% include 'prototypes/_form.html' with object=object %}
+    </div>
+  </div>
+</div>
+{% endblock %}

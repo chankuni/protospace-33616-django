@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block main %}
+<main class="main">
+  <div class="inner">
+    <div class="prototype__wrapper">
+      <p class="prototype__hedding">
+        {{prototype.title}}
+      </p>
+      <a href="{% url 'accounts:detail' prototype.user.id %}" class="prototype__user">by {{prototype.user.username}}</a>
+      <!-- プロトタイプの投稿者とログインしているユーザーが同じであれば以下を表示する -->
+      {% if request.user == prototype.user %}
+        <div class="prototype__manage">
+          <a href="{% url 'prototypes:update' prototype.id %}" class="prototype__btn">編集する</a>
+          <form action="{% url 'prototypes:delete' prototype.id %}" method="post">
+            {% csrf_token %}
+            <input type="submit" class="prototype__btn" value="削除する">
+          </form>
+        </div>
+      {% endif %}
+      <!-- プロトタイプの投稿者とログインしているユーザーが同じであれば上記を表示する -->
+      <div class="prototype__image">
+        <img src="{{prototype.image.url}}" alt="プロトタイプの画像">
+      </div>
+      <div class="prototype__body">
+        <div class="prototype__detail">
+          <p class="detail__title">キャッチコピー</p>
+          <p class="detail__message">
+            {{prototype.catch_copy}}
+          </p>
+        </div>
+        <div class="prototype__detail">
+          <p class="detail__title">コンセプト</p>
+          <p class="detail__message">
+            {{prototype.concept}}
+          </p>
+        </div>
+      </div>
+      <div class="prototype__comments">
+        <!-- ログインしているユーザーには以下のコメント投稿フォームを表示する -->
+        {% if request.user.is_authenticated %}
+        <form method="POST" >{% csrf_token %}
+          {{ form.non_field_errors }}
+          {% for field in form %}
+          <div class="field">
+            {{ field.label }}<br>
+            {{ field }}
+            {{ field.errors }}
+          </div>
+          {% endfor %}
+          <div class="actions">
+              <button type="submit" class="form__btn">送信する</button>
+          </div>
+        </form>
+        {% endif %}
+        <!-- ログインしているユーザーには上記を表示する -->
+        <ul class="comments_lists">
+          <!-- 投稿に紐づくコメントを一覧する処理を記述する -->
+          {% for comment in comments %}
+            <li class="comments_list">
+              {{ comment.content }}
+              <a href="{% url 'accounts:detail' comment.user.id %}" class="comment_user">{{comment.user.username}}</a>
+            </li>
+          {% endfor %}
+          <!-- 投稿に紐づくコメントを一覧する処理を記述する -->
+        </ul>
+      </div>
+    </div>
+  </div>
+</main>
+{% endblock %}
